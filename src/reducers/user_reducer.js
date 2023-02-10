@@ -1,6 +1,7 @@
 import { 
     LOGIN_USER,
-    REGISTER_USER
+    REGISTER_USER,
+    INSERT_BOARD
 } from '../actions/types'
 
 export default function (state = {}, action) {
@@ -10,7 +11,10 @@ export default function (state = {}, action) {
             break;
         case REGISTER_USER:
             return{...state, joingSuccess: action.payload }
+        case INSERT_BOARD:
+                return{...state, insertSuccess: action.payload }
             break;
+    
         default:
             return state;
     }

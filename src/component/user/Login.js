@@ -1,76 +1,105 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate,Link } from 'react-router-dom';
-import { loginUser } from '../../actions/user_action';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate, Link } from "react-router-dom";
+import { loginUser } from "../../actions/user_action";
 import styles from "./Login.module.css";
 
+
 function LoginPage() {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    
-    const onEmailHandler=(e)=>{
-        setEmail(e.target.value)
-
-        
-    }
-    const onPasswordHandler=(e)=>{
-        setPassword(e.target.value)
-    }
-
-    const onSubmitHandler =(e)=>{
-        e.preventDefault();
-        let body ={
-            email: email,
-            password : password,
-        }
-       
-        dispatch(loginUser(body))
-            .then(response => {
-                if (response.payload.loginSuccess) {
-                    navigate('/')
-                } else {
-                    alert('Error˝')
-                }
-            })
-
-        
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   
-       
-    }
-    return (
-        <div className={styles.sync}>
-        <div className="login-header">
-          <h1 >
-            <Link to="/">logo</Link>
-          </h1>
-          
+  const onEmailHandler = (e) => {
+    setEmail(e.target.value);
+  };
+  const onPasswordHandler = (e) => {
+    setPassword(e.target.value);
+  };
 
-          <hr></hr>
-          <p className={styles.Login1}>로그인 해주세요</p>
-          <p></p>
-        </div>
-        <div style={{ 
-            display: 'flex', justifyContent: 'center', alignItems: 'center', 
-            width: '100%', height: '100vh'
-            }}>
-            <form style={{ display: 'flex', flexDirection: 'column'}}
-                onSubmit={onSubmitHandler}
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    let body = {
+      email: email,
+      password: password,
+    };
+
+    dispatch(loginUser(body)).then((response) => {
+      if (response.payload.loginSuccess) {
+        navigate("/Meeting");
+      } else {
+        alert("Error˝");
+      }
+    });
+  };
+  return (
+    <div className={styles.login}>
+      <h1 className={styles.header} onClick={()=>{
+          navigate("/")
+      }}>
+     
+      📚 Go book 
+    
+      </h1>
+      <div style={{height:"200px"}}></div>
+      <div id="container">
+        <div className="content">
+          <div className={styles.Loginwrap}>
+            <h1 style={{ textAlign: "center" ,fontFamily:"Georgia, 'Times New Roman', Times, serif"}}>Log-in</h1>
+
+            <ul className={styles.menuwrap} role="tablist"></ul>
+            {/*아이디 비밀번호 input */}
+            <form
+              style={{ display: "flex", flexDirection: "column" }}
+              onSubmit={onSubmitHandler}
             >
-                <label>Email</label>
-                <input type='email' value={email} onChange={onEmailHandler}/>
-                <label>Password</label>
-                <input type='password' value={password} onChange={onPasswordHandler}/>
-                <br />
-                <button formAction=''>
-                    Login
-                </button>
-                <Link to="/join">회원가입</Link>
+              <ul className={styles.panelwrap}>
+                <li className={styles.pitem}>
+                  <div className={styles.pinner}>
+                    <div className="id-pw">
+                      <div className={styles.inputrow} id="id-line">
+                        <div className="icon-cell"></div>
+                        <input
+                          type="email"
+                         s
+                          value={email}
+                          onChange={onEmailHandler}
+                          placeholder="이메일"
+                        />
+                      </div>
+                      <div className={styles.inputrow}>
+                        <div className="icon-cell"></div>
+                        <input
+                          type="password"
+                          value={password}
+                          onChange={onPasswordHandler}
+                          placeholder="비밀번호"
+                        />
+                      </div>
+                    </div>
+                    <div className={styles.loginuder}></div>
+                    <div className={styles.btnlogin}>
+                      <button type="sumbit" className={styles.btn1}>
+                        <span className={styles.btntext}>로그인</span>
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              </ul>
             </form>
+          </div>
+          <ul className={styles.find}>
+            <li>
+              <Link to={"/join"}  className={styles.findtext}>
+                회원가입
+              </Link>
+            </li>
+          </ul>
         </div>
-        </div>
-    )
+      </div>
+    </div>
+  );
 }
 
 export default LoginPage;

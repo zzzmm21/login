@@ -1,0 +1,49 @@
+.login_user{ 
+    border-radius: 2px;
+   display: inline-block;
+    position: relative;
+    right: 0;
+    width: 500px;
+    height: 500px;
+    padding: 50px 30px;
+
+
+    
+}
+
+.col1{
+    display: 'flex' ;
+    width: '100%';
+    text-align: left;
+    
+}
+.meeting{
+ 
+ height: 1500px;
+}
+
+    
+
+.cal{
+    display: inline-block;
+   position: relative;
+    height: 900px;
+    width: 40%;
+   
+    
+    
+}
+.meetinginfo{
+    max-width: 1000px;
+    padding-left: 15px;
+    padding-right: 15px;
+   float: center;
+    
+    
+}
+.meetinginfo1{
+    background-color: #eee;
+    height:150px;
+    display:block;
+}
+
