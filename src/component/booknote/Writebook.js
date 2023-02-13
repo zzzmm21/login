@@ -3,6 +3,7 @@ import Header from "../layout/Header";
 import Footer from './../layout/Footer';
 import TestEditorForm from './WriteEditor';
 import { PieChartComponent } from "./PieChartComponent";
+import styles from "./Writebook.css";
 
 function Writebook(){
     return(

@@ -27,7 +27,6 @@ useEffect(()=>{
 
   })      
 },[])
-console.log(date)
   return (
 
 

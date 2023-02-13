@@ -9,6 +9,7 @@ import styles from "./Join.module.css"
 import { registerUser } from '../../actions/user_action';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import Header from './../layout/Header';
 
 function Join(props) {
     const navigate = useNavigate();
@@ -86,10 +87,33 @@ function Join(props) {
     }
 
     return (
-        <div>
-            <Container className="panel">
+        <div >
+             <h1 className={styles.header} onClick={()=>{
+          navigate("/")
+      }}>
+     
+      📚 Go book 
+    
+      </h1>
+
+        <div style={{height:"1000px", background:"#f9f9f9"}}>
+        <div style={{height:"180px"}}></div>
+            <h1 style={{textAlign:"center",marginBottom:"30px",fontFamily:"Georgia, 'Times New Roman', Times, serif"}}>Sign in</h1>
+            <Container className={styles.panel} style={{fontFamily:"Dongle, sans-serif"}} >
+          
                 <Form>
-                 
+                <Form.Group as={Row} className="mb-3">
+                        <Col sm>
+                            <Form.Control maxLength={20} placeholder="이름" value={userName} onChange={onChangeUserName} style={{marginTop:"30px"}}/>
+                            {userNameError && <div className="invalid-input">필수입니다.</div>}
+                        </Col>
+                    </Form.Group>
+                    <Form.Group as={Row} className="mb-3">
+                        <Col sm>
+                            <Form.Control maxLength={50} type="input" placeholder="이메일 주소" value={email} onChange={onChangeEmail} />
+                            {emailError && <div className="invalid-input">유효한 이메일 형식을 입력하십시오.</div>}
+                        </Col>
+                    </Form.Group>
                     <Form.Group as={Row} className="mb-3">
                         <Col sm>
                             <Form.Control maxLength={20} type="password" placeholder="Password" value={password} onChange={onChangePassword} />
@@ -102,18 +126,7 @@ function Join(props) {
                             {confirmPasswordError && <div className="invalid-input">비밀번호가 일치하지 않았습니다.</div>}
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} className="mb-3">
-                        <Col sm>
-                            <Form.Control maxLength={20} placeholder="이름" value={userName} onChange={onChangeUserName} />
-                            {userNameError && <div className="invalid-input">필수입니다.</div>}
-                        </Col>
-                    </Form.Group>
-                    <Form.Group as={Row} className="mb-3">
-                        <Col sm>
-                            <Form.Control maxLength={50} type="input" placeholder="이메일 주소" value={email} onChange={onChangeEmail} />
-                            {emailError && <div className="invalid-input">유효한 이메일 형식을 입력하십시오.</div>}
-                        </Col>
-                    </Form.Group>
+                
                     <br />
                     <div className="d-grid gap-1">
                         <Button variant="secondary" onClick={onSubmit}>
@@ -124,6 +137,7 @@ function Join(props) {
                 <br />
                 <span className="text">Have an account? <Link to="/login" className="link">로그인 하기</Link></span>
             </Container>
+            </div>
         </div>
     );
 }

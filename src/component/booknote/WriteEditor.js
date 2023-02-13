@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 // import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+
 import styled from 'styled-components';
 // import { EditorState } from 'draft-js';
-import {insertBoard} from "../../actions/borad_action"
+import {insertBoard, noteList} from "../../actions/borad_action"
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import styles from "./WirteEdbook.css";
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
 // const MyBlock = styled.div`
 //     .wrapper-class{
 //         width: 50%;
@@ -60,13 +64,103 @@ function WriteEditor(){
     })
   };
 
+  const [movieContent, setMovieContent] = useState({
+    title: '',
+    content: ''
+  })
+
+  const [viewContent, setViewContent] = useState([]);
+
+  useEffect(()=>{
+    axios.get('http://localhost:5000/api/notelist').then((response)=>{
+      setViewContent(response.data);
+
+    })
+  },[])
+
+  const submitReview = (e)=>{
+    e.preventDefault() 
+   let body= {
+      title: movieContent.title,
+      content: movieContent.content
+    }
+    dispatch(noteList(body)).then((response)=>{
+      if(response.payload.success){
+        alert("등록완료")
+      }
+    })
+  };
+
+  const getValue = e => {
+    const { name, value } = e.target;
+    setMovieContent({
+      ...movieContent,
+      [name]: value
+    })
+  };
+
   return (
     <div>
       <input type="name" onChange={onNameHandler}></input>
       
       <input type="text" onChange={onvalueHandler}></input>
+      
        <button onClick={onSubmitHandler}>입력하기</button>
+
+
+
+
+       <div className="App" style={{height:"500px"}}>
+      <h1>독서 노트 만들기</h1>
+      <div className='movie-container'>
+   
+      </div>
+      <div className='form-wrapper'>
+        <input className="title-input"
+          type='text'
+          placeholder='제목'
+          onChange={getValue}
+          name='title'
+          style={{width:"500px"}}
+        />
+        <CKEditor 
+          editor={ClassicEditor}
+          data="<p>Hello from CKEditor 5!</p>"
+          onReady={editor => {
+            // You can store the "editor" and use when it is needed.
+            console.log('Editor is ready to use!', editor);
+          }}
+          onChange={(event, editor) => {
+            const data = editor.getData();
+            console.log({ event, editor, data });
+            setMovieContent({
+              ...movieContent,
+              content: data
+            })
+          }}
+          onBlur={(event, editor) => {
+            console.log('Blur.', editor);
+          }}
+          onFocus={(event, editor) => {
+            console.log('Focus.', editor);
+          }}
+        />
+      </div>
+      <div >
+        <select placeholder='카테고리를 선택해주세요'>카테고리</select>
+      </div>
+      <button
+        className="submit-button"
+        onClick={submitReview}
+        >입력</button>
     </div>
+    </div>
+
+    
+  );
+};
+
+export default WriteEditor;
     // <MyBlock>
     //   <Editor
     //     // 에디터와 툴바 모두에 적용되는 클래스
@@ -95,8 +189,3 @@ function WriteEditor(){
     //   />
      
     // </MyBlock>
-    
-  );
-};
-
-export default WriteEditor;

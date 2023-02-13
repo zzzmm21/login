@@ -43,7 +43,7 @@ function LoginPage() {
     
       </h1>
       <div style={{height:"200px"}}></div>
-      <div id="container">
+      <div id="container" >
         <div className="content">
           <div className={styles.Loginwrap}>
             <h1 style={{ textAlign: "center" ,fontFamily:"Georgia, 'Times New Roman', Times, serif"}}>Log-in</h1>

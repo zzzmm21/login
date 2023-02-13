@@ -2,14 +2,54 @@ import Footer from "../layout/Footer";
 import Header from "../layout/Header";
 import styles from "./Booknote.css";
 import Chartdata from "./Chartdata";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PieChartComponent } from "./PieChartComponent";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import axios from "axios";
+
+import Modal from "../booknote/Modal"
 
 function Booknote() {
   let [countspan, setcountspan] = useState(5);
   let [name, setName] = useState("");
+  const [categoryname, setcategoryname] = useState([]);
+  const [notelist, setNoteList] = useState([]);
+
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => {
+    setModalOpen(true);
+};
+const closeModal = () => {
+  setModalOpen(false);
+};
+
+  
+  const notebookdel = () => {
+    if (window.confirm("삭제하시겟습니까")) {
+      axios.delete("http://localhost:5000/api/notelist",{
+        title: setNoteList.title
+      }).then(response=>{
+        console.log(response)
+      })
+      
+  
+   
+    }else{
+      console.log("error")
+    }
+  };
+  useEffect(() => {
+    axios.get("/api/notelist").then((response) => {
+      setNoteList(response.data);
+    });
+  }, []);
+  useEffect(() => {
+    axios.get("/api/category").then((response) => {
+      setcategoryname(response.data);
+    });
+  }, []);
   return (
     <div className="main">
       <Header></Header>
@@ -96,10 +136,13 @@ function Booknote() {
               className="form-select"
               style={{ width: "300px", fontSize: "1.4em" }}
             >
-              <option>카테고리</option>
-              <option value="1">소설</option>
-              <option value="2">역사</option>
-              <option value="3">문학</option>
+              {categoryname.map((category) => {
+                return (
+                  <option key={category.name} value={category}>
+                    {category.name}
+                  </option>
+                );
+              })}
             </select>
 
             <form
@@ -140,7 +183,8 @@ function Booknote() {
                     className="booknotelisttitle1"
                     style={{ width: "900px" }}
                   >
-                    <h3 style={{ margin: "15px" }}># 소설 # 역사 # 기타</h3>
+                    <h3 style={{ margin: "15px" }} ># 소설 # 역사 # 기타</h3>
+              
                     <h5 style={{ margin: "10px" }}>도서명 : 여긴어디지</h5>
                     <h5 style={{ fontSize: "18px", margin: "10px" }}>
                       제목 : 니나니노{" "}
@@ -159,92 +203,72 @@ function Booknote() {
                       👍{countspan}
                     </span>
                     <br />
-                    <span style={{ height: "50px", width: "80px" }}>🗑</span>
+                    <span style={{ height: "50px", width: "80px" }}>
+                      🗑</span>
                   </div>
                 </div>
                 <hr></hr>
-                <div
-                  className="booknotelist1"
-                  style={{
-                    paddingTop: "30px",
-                    paddingBottom: "20px",
-                    display: "flex",
-                  }}
-                >
-                  <div className="tumb">
-                    <img
-                      src="https://cdn.imweb.me/thumbnail/20210513/c11d338c7208e.jpg"
-                      style={{ width: "160px" }}
-                    ></img>
-                  </div>
-                  <div
-                    className="booknotelisttitle1"
-                    style={{ width: "900px" }}
-                  >
-                    <h3 style={{ margin: "15px" }} value={name}>
-                     
-                    </h3>
-                    <h5 style={{ margin: "10px" }}>도서명 : 프론트엔드</h5>
-                    <h5 style={{ fontSize: "18px", margin: "10px" }}>
-                      제목 : 집에가고싶다{" "}
-                    </h5>
-                  </div>
-                  <div
-                    className="booknotelisticon"
-                    style={{ display: "block" }}
-                  >
-                    <span
-                      style={{ height: "100px" }}
-                      onClick={() => {
-                        setcountspan(countspan + 1);
-                      }}
-                    >
-                      👍{countspan}
-                    </span>
-                    <br />
-                    <span style={{ height: "50px", width: "80px" }}>🗑</span>
-                  </div>
-                </div>
-                <hr></hr>
-                <div
-                  className="booknotelist1"
-                  style={{
-                    paddingTop: "30px",
-                    paddingBottom: "20px",
-                    display: "flex",
-                  }}
-                >
-                  <div className="tumb">
-                    <img
-                      src="https://cdn.imweb.me/thumbnail/20230204/1225630397680.jpg"
-                      style={{ width: "160px" }}
-                    ></img>
-                  </div>
-                  <div
-                    className="booknotelisttitle1"
-                    style={{ width: "900px" }}
-                  >
-                    <h3 style={{ margin: "15px" }}># 소설 # 역사 # 기타</h3>
-                    <h5 style={{ margin: "10px" }}>도서명 : 으으아아가아아</h5>
-                    <h5 style={{ fontSize: "18px", margin: "10px" }}>
-                      제목 : 백엔드{" "}
-                    </h5>
-                  </div>
-                  <div
-                    className="booknotelisticon"
-                    style={{ display: "block" }}
-                  >
-                    <span
-                      style={{ height: "100px" }}
-                      onClick={() => {
-                        setcountspan(countspan + 1);
-                      }}
-                    >
-                      👍{countspan}
-                    </span>
-                    <br />
-                    <span style={{ height: "50px", width: "80px" }}>🗑</span>
-                  </div>
+
+                <div className="booknotelist1" style={{}}>
+                  {notelist.map((booknotlist) => {
+                    return (
+                      <div>
+                        <div className="tumb">
+                          <img
+                            src="https://cdn.imweb.me/thumbnail/20230204/1225630397680.jpg"
+                            style={{ width: "160px" }}
+                          ></img>
+                        </div>
+                        <div
+                          key={booknotlist.title}
+                          className="booknotelisttitle1"
+                          style={{
+                            width: "1000px",
+                            paddingTop: "30px",
+                            paddingBottom: "20px",
+                            display: "flex",
+                          }}
+                        >
+                          <h3
+                            style={{ margin: "15px" }}
+                            onClick={openModal}
+                            
+                          
+                          >
+                      
+                    
+                            {booknotlist.title}
+                          </h3>
+                          {modalOpen && <Modal setModalOpen={setModalOpen} />}
+                          <h5 style={{ margin: "10px" }}>
+                            {booknotlist.content}
+                          </h5>
+
+                          <div
+                            className="booknotelisticon"
+                            style={{ display: "block" }}
+                          >
+                            <span
+                              style={{ height: "100px" }}
+                              onClick={() => {
+                                setcountspan(countspan + 1);
+                              }}
+                            >
+                              👍{countspan}
+                            </span>
+                            <br />
+                            <span
+                            onClick={notebookdel}
+                              style={{ height: "50px", width: "80px" }}
+                            >
+                              🗑
+                            </span>
+                          </div>
+                        </div>
+                        <hr></hr>
+                      </div>
+                    );
+                  })}
                 </div>
                 <hr></hr>
               </div>
